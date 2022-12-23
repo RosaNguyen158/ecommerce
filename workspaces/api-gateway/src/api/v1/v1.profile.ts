@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import type { Mapper } from '@automapper/core';
 
 import { productProfile } from 'api/v1/products/product.profile';
-import { categoryProfile } from 'api/v1/categories/categories.profile';
+import { categoriesProfile } from 'api/v1/categories/categories.profile';
 
 @Injectable()
 export class V1Profile extends AutomapperProfile {
@@ -15,7 +15,7 @@ export class V1Profile extends AutomapperProfile {
   override get profile() {
     return (mapper: Mapper) => {
       addProfile(mapper, productProfile);
-      addProfile(mapper, categoryProfile);
+      addProfile(mapper, categoriesProfile);
     };
   }
 }
