@@ -15,11 +15,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AuthGuard } from '@nestjs/passport';
 import type { Repository } from 'typeorm';
 
-import { PagyDto } from 'dto';
 import {
   CreateProductDto,
   UpdateProductDto,
 } from 'api/admin/products/products.dto';
+import { PagyDto } from 'dto';
 import {
   ProductsPagyMetadataVM,
   ProductsPagyVM,
