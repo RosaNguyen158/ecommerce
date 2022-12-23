@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { Category } from 'database/models/category.entity';
 import { Product } from 'database/models/product.entity';
 import { ProductsCategories } from 'database/models/productsCategories.entity';
-import { ProductsModule } from 'api/admin/products/product.module';
+import { ProductsModule } from 'api/admin/products/products.module';
 import { createTestingModule } from '__tests__/utils';
 import { categoriesSample } from '__tests__/seeds/categories';
 import { productSample } from '__tests__/seeds/product';
