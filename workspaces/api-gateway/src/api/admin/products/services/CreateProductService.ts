@@ -7,6 +7,7 @@ import { Product } from 'database/models/product.entity';
 import { CheckProductExistedService } from 'api/admin/products/services/CheckProductExistedService';
 import { CreateProductCategoryService } from 'api/admin/products/services/CreateProductCategoryService';
 import { GetCategoryByKeyService } from 'api/admin/categories/services/GetCategoryByKeyService';
+import { CreateVariantService } from 'api/admin/productVariants/variants/services/CreateVariantService';
 import type { CreateProductDto } from 'api/admin/products/products.dto';
 
 @Injectable()
@@ -17,13 +18,18 @@ export class CreateProductService {
     private checkProductExistedService: CheckProductExistedService,
     private createProductCategoryService: CreateProductCategoryService,
     private getCategoryByKeyService: GetCategoryByKeyService,
+    private createVariantService: CreateVariantService,
   ) {}
 
-  public async exec({ categoryId, name }: CreateProductDto): Promise<Product> {
+  public async exec({
+    categoryId,
+    name,
+    variants,
+  }: CreateProductDto): Promise<Product> {
     const checkCategory = await this.getCategoryByKeyService.exec(categoryId);
 
     const newProduct = this.productRepository.create({
-      name: name,
+      name,
       category: checkCategory,
       slug: await createSlug(
         {
@@ -35,12 +41,26 @@ export class CreateProductService {
         ),
       ),
     });
+
     try {
       await this.productRepository.save(newProduct);
       await this.createProductCategoryService.exec({
         categoryId: checkCategory.id,
         productId: newProduct.id,
       });
+
+      if (variants) {
+        variants.map(async (params) => {
+          const { price, quantity, listOptions } = params;
+          await this.createVariantService.exec({
+            productId: newProduct.id,
+            price,
+            quantity,
+            listOptions,
+          });
+        });
+      }
+
       return newProduct;
     } catch (error) {
       throw new InternalServerErrorException();
