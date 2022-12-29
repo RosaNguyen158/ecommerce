@@ -13,9 +13,21 @@ import { CreateProductCategoryService } from 'api/admin/products/services/Create
 import { GetCategoryByKeyService } from 'api/admin/categories/services/GetCategoryByKeyService';
 import { GetRelatedCategoriesService } from 'api/admin/categories/services/GetRelatedCategoriesService';
 import { DeleteProductService } from 'api/admin/products/services/DeleteProductService';
+import { Variant } from 'database/models/variant.entity';
+import { CreateVariantService } from 'api/admin/productVariants/variants/services/CreateVariantService';
+import { CreateVariantDetailService } from 'api/admin/productVariants/variants/services/CreateVariantDetailService';
+import { VariantDetail } from 'database/models/variantDetail.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product, ProductsCategories, Category])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Product,
+      ProductsCategories,
+      Category,
+      Variant,
+      VariantDetail,
+    ]),
+  ],
   providers: [
     CreateProductService,
     GetListProductsService,
@@ -25,6 +37,8 @@ import { DeleteProductService } from 'api/admin/products/services/DeleteProductS
     GetCategoryByKeyService,
     GetRelatedCategoriesService,
     DeleteProductService,
+    CreateVariantService,
+    CreateVariantDetailService,
   ],
   controllers: [ProductsController],
 })

@@ -1,4 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
+import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateProductDto {
@@ -9,6 +10,8 @@ export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
   categoryId: string;
+
+  variants?: VariantDto[];
 }
 
 export class CreateProCateDto {
@@ -23,4 +26,22 @@ export class CreateProCateDto {
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {
   slug: string;
+}
+
+export class VariantDto {
+  @Transform(({ value }) => parseFloat(value))
+  price: number;
+
+  @Transform(({ value }) => parseInt(value, 10))
+  quantity: number;
+
+  listOptions: OptionDto[];
+}
+
+export class OptionDto {
+  @IsString()
+  optionId: string;
+
+  @IsNotEmpty()
+  valueOption: string;
 }

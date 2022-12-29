@@ -10,6 +10,7 @@ import { AutoMap } from '@automapper/classes';
 import { Category } from 'database/models/category.entity';
 import { ProductsCategories } from 'database/models/productsCategories.entity';
 import { BaseModel } from 'database/models/BaseModel';
+import { Variant } from 'database/models/variant.entity';
 
 @Entity({ name: 'products' })
 export class Product extends BaseModel {
@@ -37,6 +38,9 @@ export class Product extends BaseModel {
     (productsCategories) => productsCategories.product,
   )
   productsCategories?: ProductsCategories[];
+
+  @OneToMany(() => Variant, (variant) => variant.product)
+  variants?: Variant[];
 
   @DeleteDateColumn()
   deletedAt?: Date;
