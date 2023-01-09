@@ -5,6 +5,7 @@ import type { Mapper } from '@automapper/core';
 
 import { productsProfile } from 'api/v1/products/products.profile';
 import { categoriesProfile } from 'api/v1/categories/categories.profile';
+import { cartsProfile } from 'api/v1/carts/carts.profile';
 
 @Injectable()
 export class V1Profile extends AutomapperProfile {
@@ -16,6 +17,7 @@ export class V1Profile extends AutomapperProfile {
     return (mapper: Mapper) => {
       addProfile(mapper, productsProfile);
       addProfile(mapper, categoriesProfile);
+      addProfile(mapper, cartsProfile);
     };
   }
 }

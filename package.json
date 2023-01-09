@@ -5,22 +5,23 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "update-packages": "pnpm update -i -r --latest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/detect-port": "^1.3.2",
-    "@typescript-eslint/eslint-plugin": "^5.40.0",
-    "@typescript-eslint/parser": "^5.40.0",
-    "eslint": "^8.25.0",
-    "eslint-config-prettier": "^8.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^8.0.0",
-    "lint-staged": "^13.0.3",
-    "prettier": "^2.7.1",
-    "typescript": "^4.8.4"
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
+    "prettier": "^2.8.2",
+    "typescript": "^4.9.4"
   },
   "dependencies": {
     "detect-port": "^1.5.1"

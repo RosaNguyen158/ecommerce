@@ -1,15 +1,16 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, TableInheritance } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
 
 import { BaseModel } from 'database/models/BaseModel';
-import { PaymentOrder } from 'database/models/paymentOrder.entity';
+import type { ICheckoutParams } from 'api/v1/payments/payments.interface';
+import type { ICheckoutResults } from 'api/v1/payments/payments.controller';
 
 @Entity({ name: 'payment_methods' })
-export class PaymentMethod extends BaseModel {
+@TableInheritance({ column: { type: 'varchar', name: 'type' } })
+export abstract class PaymentMethod extends BaseModel {
   @AutoMap()
   @Column()
   name: string;
 
-  @OneToMany(() => PaymentOrder, (paymentOrder) => paymentOrder.method)
-  paymentOrders?: PaymentOrder[];
+  public abstract checkout(params: ICheckoutParams): Promise<ICheckoutResults>;
 }

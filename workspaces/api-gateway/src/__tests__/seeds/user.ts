@@ -8,4 +8,5 @@ export const userData: User = {
   createdAt: null,
   updatedAt: null,
   role: roles.admin,
+  cart: null,
 };

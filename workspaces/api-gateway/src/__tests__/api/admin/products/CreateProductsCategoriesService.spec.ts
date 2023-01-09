@@ -46,17 +46,18 @@ describe('ProductsService', () => {
       name: 'shirt',
       category: category,
       slug: 'shirt',
+      price: 30,
     });
     await productsRepository.save(product);
   });
 
   afterEach(async () => {
-    const QueryRunner = dataSource.createQueryRunner();
+    const queryRunner = dataSource.createQueryRunner();
 
-    await QueryRunner.manager.query('TRUNCATE products_categories CASCADE');
-    await QueryRunner.manager.query('TRUNCATE products CASCADE');
-    await QueryRunner.manager.query('TRUNCATE categories_closure CASCADE');
-    await QueryRunner.manager.query('TRUNCATE categories CASCADE');
+    await queryRunner.manager.query('TRUNCATE products_categories CASCADE');
+    await queryRunner.manager.query('TRUNCATE products CASCADE');
+    await queryRunner.manager.query('TRUNCATE categories_closure CASCADE');
+    await queryRunner.manager.query('TRUNCATE categories CASCADE');
   });
 
   afterAll(async () => {

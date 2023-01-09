@@ -43,16 +43,17 @@ describe('ProductsService', () => {
     product = await createProductService.exec({
       categoryId: category.id,
       name: 'shirt',
+      price: 30,
     });
   });
 
   afterEach(async () => {
-    const QueryRunner = dataSource.createQueryRunner();
+    const queryRunner = dataSource.createQueryRunner();
 
-    await QueryRunner.manager.query('TRUNCATE products_categories CASCADE');
-    await QueryRunner.manager.query('TRUNCATE products CASCADE');
-    await QueryRunner.manager.query('TRUNCATE categories_closure CASCADE');
-    await QueryRunner.manager.query('TRUNCATE categories CASCADE');
+    await queryRunner.manager.query('TRUNCATE products_categories CASCADE');
+    await queryRunner.manager.query('TRUNCATE products CASCADE');
+    await queryRunner.manager.query('TRUNCATE categories_closure CASCADE');
+    await queryRunner.manager.query('TRUNCATE categories CASCADE');
   });
 
   afterAll(async () => {
@@ -71,6 +72,7 @@ describe('ProductsService', () => {
           id: product.id,
           name: 'update',
           slug: 'update',
+          price: 30,
           createdAt: new Date(),
           updatedAt: new Date(),
           deletedAt: null,

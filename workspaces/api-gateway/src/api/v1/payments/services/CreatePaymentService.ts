@@ -1,60 +1,54 @@
-import { Stripe } from 'stripe';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-
-import { PaymentOrder } from 'database/models/paymentOrder.entity';
 import type { Repository } from 'typeorm';
 
-export interface IPaymentStripe {
-  orderId: string;
-  methodId: string;
-  total: number;
-}
-
-// export abstract class Checkout {
-//   constructor(
-//     @InjectRepository(PaymentMethod)
-//     private paymentMethodRepository: Repository<PaymentMethod>,
-//   ) {}
-
-//   abstract checkout(): any;
-// }
+import { Payment } from 'database/models/payment.entity';
+import { PaymentDetail } from 'database/models/paymentDetail.entity';
+import type { ICreatePaymentParams } from 'api/v1/payments/payments.interface';
 
 @Injectable()
-export class CreateStripeCheckoutService {
+export class CreatePaymentService {
   constructor(
-    @InjectRepository(PaymentOrder)
-    private paymenOrderRepository: Repository<PaymentOrder>,
-    private stripe: Stripe,
-  ) {
-    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2022-11-15',
-    });
-  }
+    @InjectRepository(Payment)
+    private paymentRepository: Repository<Payment>,
+    @InjectRepository(PaymentDetail)
+    private paymentDetailRepository: Repository<PaymentDetail>,
+  ) {}
 
   public async exec({
-    orderId,
+    userId,
     methodId,
-    total,
-  }: IPaymentStripe): Promise<PaymentOrder> {
-    const newPaymentIntent = await this.stripe.paymentIntents.create({
-      amount: +total * 100,
-      currency: 'usd',
-      payment_method_types: ['card'],
-      metadata: { orderId },
-    });
-
-    console.log(newPaymentIntent);
-
-    const newPaymentOrder = this.paymenOrderRepository.create({
-      orderId,
-      status: 'unpaid',
-      amount: total,
+    listCartDetails,
+    amount,
+    metadata,
+  }: ICreatePaymentParams): Promise<Payment> {
+    const newPayment = this.paymentRepository.create({
+      userId,
+      metadata,
       methodId,
+      amount,
     });
 
     try {
-      return this.paymenOrderRepository.save(newPaymentOrder);
+      await this.paymentRepository.save(newPayment);
+
+      await this.paymentDetailRepository
+        .createQueryBuilder()
+        .insert()
+        .into(PaymentDetail)
+        .values(
+          listCartDetails.map(({ productId, quantity, product }) => {
+            return {
+              paymentId: newPayment.id,
+              productId,
+              quantity,
+              unitPrice: product.price,
+            };
+          }),
+        )
+        .execute();
+
+      return newPayment;
     } catch (error) {
       throw new InternalServerErrorException(error);
     }

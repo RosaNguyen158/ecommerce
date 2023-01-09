@@ -36,7 +36,8 @@ describe('SignInService', () => {
   });
 
   afterEach(async () => {
-    await userRepository.clear();
+    const queryRunner = dataSource.createQueryRunner();
+    await queryRunner.manager.query('TRUNCATE users CASCADE');
   });
 
   afterAll(async () => {

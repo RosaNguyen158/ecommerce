@@ -1,15 +1,15 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
+import { Column, Entity, ManyToOne } from 'typeorm';
 
 import { BaseModel } from 'database/models/BaseModel';
-import { Order } from 'database/models/order.entity';
+import { Cart } from 'database/models/cart.entity';
 import { Product } from 'database/models/product.entity';
 
-@Entity({ name: 'order_details' })
-export class OrderDetail extends BaseModel {
+@Entity({ name: 'cart_details' })
+export class CartDetail extends BaseModel {
   @AutoMap()
   @Column()
-  orderId: string;
+  cartId: string;
 
   @AutoMap()
   @Column()
@@ -19,19 +19,15 @@ export class OrderDetail extends BaseModel {
   @Column()
   quantity: number;
 
-  @AutoMap()
-  @Column()
-  unitPrice: number;
-
-  @AutoMap(() => Order)
-  @ManyToOne(() => Order, (order) => order.orderDetails, {
+  @AutoMap(() => Cart)
+  @ManyToOne(() => Cart, (cart) => cart.cartDetails, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  order: Order;
+  cart: Cart;
 
   @AutoMap(() => Product)
-  @ManyToOne(() => Product, (product) => product.orderDetails, {
+  @ManyToOne(() => Product, (product) => product.cartDetails, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })

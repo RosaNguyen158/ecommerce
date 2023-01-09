@@ -1,13 +1,11 @@
 import { Table, TableForeignKey } from 'typeorm';
 import type { QueryRunner, MigrationInterface } from 'typeorm';
 
-export class createPaymentOrderMigration1672300242106
-  implements MigrationInterface
-{
+export class createPaymentMigration1673594524537 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'payment_orders',
+        name: 'payments',
         columns: [
           {
             name: 'id',
@@ -17,7 +15,7 @@ export class createPaymentOrderMigration1672300242106
             generationStrategy: 'uuid',
           },
           {
-            name: 'order_id',
+            name: 'user_id',
             type: 'uuid',
           },
           {
@@ -25,14 +23,19 @@ export class createPaymentOrderMigration1672300242106
             type: 'uuid',
           },
           {
+            name: 'amount',
+            type: 'numeric(5,2)',
+          },
+          {
             name: 'status',
             type: 'enum',
-            enum: ['unpaid', 'pending', 'paid'],
+            enum: ['unpaid', 'pending', 'paid', 'failed'],
             default: `'unpaid'`,
           },
           {
-            name: 'amount',
-            type: 'numeric(5,2)',
+            name: 'metadata',
+            type: 'jsonb',
+            default: `'{}'`,
           },
           {
             name: 'created_at',
@@ -49,17 +52,17 @@ export class createPaymentOrderMigration1672300242106
     );
 
     await queryRunner.createForeignKey(
-      'payment_orders',
+      'payments',
       new TableForeignKey({
-        columnNames: ['order_id'],
+        columnNames: ['user_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'orders',
+        referencedTableName: 'users',
         onDelete: 'CASCADE',
       }),
     );
 
     await queryRunner.createForeignKey(
-      'payment_orders',
+      'payments',
       new TableForeignKey({
         columnNames: ['method_id'],
         referencedColumnNames: ['id'],
@@ -70,6 +73,6 @@ export class createPaymentOrderMigration1672300242106
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('payment_orders');
+    await queryRunner.dropTable('payments');
   }
 }

@@ -1,8 +1,9 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
 
 import { BaseModel } from 'database/models/BaseModel';
-import { Order } from 'database/models/order.entity';
+import { Payment } from 'database/models/payment.entity';
+import { Cart } from 'database/models/cart.entity';
 
 export const roles = {
   user: 'user',
@@ -32,6 +33,9 @@ export class User extends BaseModel {
   })
   role: TRole;
 
-  @OneToMany(() => Order, (order) => order.user)
-  orders?: Order[];
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments?: Payment[];
+
+  @OneToOne(() => Cart, (cart) => cart.user)
+  cart: Cart;
 }

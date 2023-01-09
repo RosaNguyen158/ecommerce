@@ -26,6 +26,7 @@ describe('ProductsService', () => {
   const createProductDto: CreateProductDto = {
     categoryId: '1',
     name: 'shirt',
+    price: 30,
   };
 
   const createCategoryDto: CreateCategoryDto = {
@@ -46,9 +47,7 @@ describe('ProductsService', () => {
     createCategoryService = module.get(CreateCategoryService);
 
     mockDate = productSample.createdAt;
-    jest
-      .spyOn(global, 'Date')
-      .mockImplementation(() => mockDate as unknown as string);
+    jest.spyOn(global, 'Date').mockImplementation(() => mockDate);
   });
 
   beforeEach(async () => {
@@ -58,12 +57,12 @@ describe('ProductsService', () => {
   });
 
   afterEach(async () => {
-    const QueryRunner = dataSource.createQueryRunner();
+    const queryRunner = dataSource.createQueryRunner();
 
-    await QueryRunner.manager.query('TRUNCATE products_categories CASCADE');
-    await QueryRunner.manager.query('TRUNCATE products CASCADE');
-    await QueryRunner.manager.query('TRUNCATE categories_closure CASCADE');
-    await QueryRunner.manager.query('TRUNCATE categories CASCADE');
+    await queryRunner.manager.query('TRUNCATE products_categories CASCADE');
+    await queryRunner.manager.query('TRUNCATE products CASCADE');
+    await queryRunner.manager.query('TRUNCATE categories_closure CASCADE');
+    await queryRunner.manager.query('TRUNCATE categories CASCADE');
   });
 
   afterAll(async () => {

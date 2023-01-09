@@ -9,6 +9,7 @@ import { genSalt, hash } from 'bcrypt';
 import type { Repository } from 'typeorm';
 
 import { User } from 'database/models/user.entity';
+import { CreateCartService } from 'api/v1/carts/services/CreateCartService';
 import type { AuthCredentialsDto } from 'api/auth/dto/auth-credential.dto';
 import type { IAuthProps, IJwtPayload } from 'api/auth/auth.interface';
 
@@ -18,6 +19,7 @@ export class SignUpService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private jwtService: JwtService,
+    private createCartService: CreateCartService,
   ) {}
 
   async exec({ username, password }: AuthCredentialsDto): Promise<IAuthProps> {
@@ -30,6 +32,9 @@ export class SignUpService {
     });
     try {
       await this.userRepository.save(user);
+
+      await this.createCartService.exec({ userId: user.id });
+
       return {
         profile: user,
         authToken: this.jwtService.sign(payload),
@@ -38,7 +43,7 @@ export class SignUpService {
       if (error['code'] === '23505') {
         throw new ConflictException('Username already exist');
       } else {
-        throw new InternalServerErrorException();
+        throw new InternalServerErrorException(error);
       }
     }
   }

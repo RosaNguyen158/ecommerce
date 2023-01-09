@@ -10,7 +10,8 @@ import { AutoMap } from '@automapper/classes';
 import { BaseModel } from 'database/models/BaseModel';
 import { Category } from 'database/models/category.entity';
 import { ProductsCategories } from 'database/models/productsCategories.entity';
-import { OrderDetail } from 'database/models/orderDetail.entity';
+import { PaymentDetail } from 'database/models/paymentDetail.entity';
+import { CartDetail } from 'database/models/cartDetail.entity';
 
 @Entity({ name: 'products' })
 export class Product extends BaseModel {
@@ -26,6 +27,10 @@ export class Product extends BaseModel {
   @Column()
   slug: string;
 
+  @AutoMap()
+  @Column()
+  price: number;
+
   @ManyToOne(() => Category, (category) => category.products, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
@@ -39,8 +44,14 @@ export class Product extends BaseModel {
   )
   productsCategories?: ProductsCategories[];
 
-  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.product)
-  orderDetails?: OrderDetail[];
+  @OneToMany(
+    () => PaymentDetail,
+    (paymentdetailDetail) => paymentdetailDetail.product,
+  )
+  paymentDetails?: PaymentDetail[];
+
+  @OneToMany(() => CartDetail, (cartDetailDetail) => cartDetailDetail.product)
+  cartDetails?: CartDetail[];
 
   @DeleteDateColumn()
   deletedAt?: Date;

@@ -28,6 +28,8 @@ import { SignUpService } from 'api/auth/services/SignUpService';
 import { JwtStrategy } from 'api/auth/jwt.strategy';
 import { GetProfileService } from 'api/auth/services/GetProfileService';
 import { AdminProfile } from 'api/admin/admin.profile';
+import { Cart } from 'database/models/cart.entity';
+import { CreateCartService } from 'api/v1/carts/services/CreateCartService';
 import type { IAuthProps } from 'api/auth/auth.interface';
 import type { CreateProductDto } from 'api/admin/products/products.dto';
 import type { CreateCategoryDto } from 'api/admin/categories/categories.dto';
@@ -47,6 +49,7 @@ describe('ProductsController (e2e)', () => {
   const createProductDto: CreateProductDto = {
     categoryId: null,
     name: productSample.name,
+    price: productSample.price,
   };
 
   const createCategoryDto: CreateCategoryDto = {
@@ -65,7 +68,7 @@ describe('ProductsController (e2e)', () => {
           },
         }),
       ],
-      entities: [Category, Product, ProductsCategories, User],
+      entities: [Category, Product, ProductsCategories, User, Cart],
       providers: [
         CreateCategoryService,
         CheckCategoryExistedService,
@@ -74,6 +77,7 @@ describe('ProductsController (e2e)', () => {
         JwtStrategy,
         SignUpService,
         GetProfileService,
+        CreateCartService,
         AdminProfile,
       ],
     });
@@ -100,13 +104,13 @@ describe('ProductsController (e2e)', () => {
   });
 
   afterEach(async () => {
-    const QueryRunner = dataSource.createQueryRunner();
+    const queryRunner = dataSource.createQueryRunner();
 
-    await QueryRunner.manager.query('TRUNCATE products_categories CASCADE');
-    await QueryRunner.manager.query('TRUNCATE products CASCADE');
-    await QueryRunner.manager.query('TRUNCATE categories_closure CASCADE');
-    await QueryRunner.manager.query('TRUNCATE categories CASCADE');
-    await QueryRunner.manager.query('TRUNCATE users CASCADE');
+    await queryRunner.manager.query('TRUNCATE products_categories CASCADE');
+    await queryRunner.manager.query('TRUNCATE products CASCADE');
+    await queryRunner.manager.query('TRUNCATE categories_closure CASCADE');
+    await queryRunner.manager.query('TRUNCATE categories CASCADE');
+    await queryRunner.manager.query('TRUNCATE users CASCADE');
   });
 
   afterAll(async () => {
@@ -200,6 +204,7 @@ describe('ProductsController (e2e)', () => {
           id: product.id,
           name: 'update',
           slug: 'update',
+          price: 30,
         };
 
         return request(app.getHttpServer())

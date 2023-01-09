@@ -19,15 +19,20 @@ export class CreateProductService {
     private getCategoryByKeyService: GetCategoryByKeyService,
   ) {}
 
-  public async exec({ categoryId, name }: CreateProductDto): Promise<Product> {
+  public async exec({
+    categoryId,
+    name,
+    price,
+  }: CreateProductDto): Promise<Product> {
     const checkCategory = await this.getCategoryByKeyService.exec(categoryId);
 
     const newProduct = this.productRepository.create({
       name: name,
       category: checkCategory,
+      price,
       slug: await createSlug(
         {
-          name: name,
+          name,
           columnName: 'slug',
         },
         this.checkProductExistedService.exec.bind(
@@ -43,7 +48,7 @@ export class CreateProductService {
       });
       return newProduct;
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(error);
     }
   }
 }

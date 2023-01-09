@@ -10,6 +10,9 @@ export class ProductVM {
   categoryId: string;
 
   @AutoMap()
+  price: number;
+
+  @AutoMap()
   slug: string;
 }
 

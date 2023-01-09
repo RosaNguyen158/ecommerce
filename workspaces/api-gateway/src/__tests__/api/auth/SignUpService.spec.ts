@@ -1,7 +1,6 @@
 import { compare, genSalt, hash } from 'bcrypt';
 import { DataSource } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import type { Repository } from 'typeorm';
 
 import { User } from 'database/models/user.entity';
 import { AuthModule } from 'api/auth/auth.module';
@@ -11,7 +10,6 @@ import { SignUpService } from 'api/auth/services/SignUpService';
 import type { AuthCredentialsDto } from 'api/auth/dto/auth-credential.dto';
 
 describe('SignUpService', () => {
-  let userRepository: Repository<User>;
   let dataSource: DataSource;
   let jwtService: JwtService;
   let signUpService: SignUpService;
@@ -27,7 +25,6 @@ describe('SignUpService', () => {
       entities: [User],
     });
 
-    userRepository = module.get('UserRepository');
     dataSource = module.get(DataSource);
     signUpService = module.get(SignUpService);
     jwtService = module.get(JwtService);
@@ -35,7 +32,8 @@ describe('SignUpService', () => {
   });
 
   afterEach(async () => {
-    await userRepository.clear();
+    const queryRunner = dataSource.createQueryRunner();
+    await queryRunner.manager.query('TRUNCATE users CASCADE');
   });
 
   afterAll(async () => {

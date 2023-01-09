@@ -1,4 +1,5 @@
 import * as request from 'supertest';
+import { DataSource } from 'typeorm';
 import type { Mapper } from '@automapper/core';
 import type { INestApplication } from '@nestjs/common';
 
@@ -12,7 +13,6 @@ import {
 import { Category } from 'database/models/category.entity';
 import { Product } from 'database/models/product.entity';
 import { ProductsCategories } from 'database/models/productsCategories.entity';
-import { DataSource } from 'typeorm';
 import { categoriesSample } from '__tests__/seeds/categories';
 import { productSample } from '__tests__/seeds/product';
 import { createTestingModule } from '__tests__/utils';
@@ -72,16 +72,17 @@ describe('ProductsController V1 (e2e)', () => {
     product = await createProductService.exec({
       categoryId: category.id,
       name: productSample.name,
+      price: 30,
     });
   });
 
   afterEach(async () => {
-    const QueryRunner = dataSource.createQueryRunner();
+    const queryRunner = dataSource.createQueryRunner();
 
-    await QueryRunner.manager.query('TRUNCATE products_categories CASCADE');
-    await QueryRunner.manager.query('TRUNCATE products CASCADE');
-    await QueryRunner.manager.query('TRUNCATE categories_closure CASCADE');
-    await QueryRunner.manager.query('TRUNCATE categories CASCADE');
+    await queryRunner.manager.query('TRUNCATE products_categories CASCADE');
+    await queryRunner.manager.query('TRUNCATE products CASCADE');
+    await queryRunner.manager.query('TRUNCATE categories_closure CASCADE');
+    await queryRunner.manager.query('TRUNCATE categories CASCADE');
   });
 
   afterAll(async () => {

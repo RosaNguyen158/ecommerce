@@ -21,6 +21,10 @@ export class createPaymentMethodMigration1672298577554
             type: 'varchar',
           },
           {
+            name: 'type',
+            type: 'varchar',
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',
