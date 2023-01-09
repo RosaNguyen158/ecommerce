@@ -27,7 +27,7 @@ export class createPaymentOrderMigration1672300242106
           {
             name: 'status',
             type: 'enum',
-            enum: ['unpaid', 'pending', 'paid'],
+            enum: ['unpaid', 'pending', 'paid', 'failed'],
             default: `'unpaid'`,
           },
           {

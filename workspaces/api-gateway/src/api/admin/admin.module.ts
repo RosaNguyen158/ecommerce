@@ -3,7 +3,7 @@ import type { RouteTree } from '@nestjs/core';
 
 import { AdminProfile } from 'api/admin/admin.profile';
 import { CategoriesModule } from 'api/admin/categories/categories.module';
-import { PaymentMethodsModule } from 'api/admin/payments/payments.module';
+import { PaymentMethodsModule } from 'api/admin/paymentMethods/paymentMethods.module';
 import { ProductsModule } from 'api/admin/products/products.module';
 
 @Module({

@@ -1,3 +1,4 @@
+import Stripe from 'stripe';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import type { RouteTree } from '@nestjs/core';
@@ -10,17 +11,41 @@ import { OrderDetail } from 'database/models/orderDetail.entity';
 import { PaymentMethod } from 'database/models/paymentMethod.entity';
 import { PaymentOrder } from 'database/models/paymentOrder.entity';
 import { OrdersModule } from 'api/v1/orders/orders.module';
-import { PaymentsModule } from 'api/v1/payments/payments.module';
+import { PaymentsModule } from 'api/v1/paymentOrders/payments.module';
+import { WebhooksController } from 'api/v1/webhook.controller';
+import { StripeService } from 'api/services/StripeService';
+import { CreateOrderService } from 'api/v1/orders/services/CreateOrderService';
+import { CreateOrderDetailService } from 'api/v1/orders/services/CreateOrderDetailService';
+import { StripeMethod } from 'database/models/paymentMethods/stripe.entity';
+import { CreatePaymentOrderService } from 'api/v1/paymentOrders/services/CreatePaymentOrderService';
+import { OCDMethod } from 'database/models/paymentMethods/ocd.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Order, OrderDetail, PaymentMethod, PaymentOrder]),
-    ProductsModule,
+    TypeOrmModule.forFeature([
+      Order,
+      OrderDetail,
+      PaymentMethod,
+      PaymentOrder,
+      StripeMethod,
+      OCDMethod,
+    ]),
     CategoriesModule,
-    OrdersModule,
     PaymentsModule,
+    OrdersModule,
   ],
-  providers: [V1Profile],
+  controllers: [WebhooksController],
+  providers: [
+    V1Profile,
+    Stripe,
+    String,
+    StripeService,
+    CreateOrderDetailService,
+    CreatePaymentOrderService,
+    CreateOrderService,
+    StripeMethod,
+    OCDMethod,
+  ],
 })
 export class V1Module {}
 

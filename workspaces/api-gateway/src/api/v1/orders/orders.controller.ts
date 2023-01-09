@@ -1,28 +1,13 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get } from '@nestjs/common';
 
-import { CreateOrderDto, GetOrderDto } from 'api/v1/orders/orders.dto';
-import { CreateOrderService } from 'api/v1/orders/services/CreateOrderService';
-import {
-  GetOrderService,
-  IGetOrderParams,
-} from 'api/v1/orders/services/GetOrderService';
+import { GetOrderService } from 'api/v1/orders/services/GetOrderService';
 import { Order } from 'database/models/order.entity';
+import { GetOrderDto } from 'api/v1/orders/orders.dto';
+import type { IGetOrderParams } from 'api/v1/orders/services/GetOrderService';
 
 @Controller('orders')
 export class OrdersController {
-  constructor(
-    private readonly createOrderService: CreateOrderService,
-    private readonly getOrderService: GetOrderService,
-  ) {}
-
-  @Post()
-  public async createOrder(@Body() createOrderDto: CreateOrderDto): Promise<{
-    order: Order;
-    amount: number;
-    status: string;
-  }> {
-    return this.createOrderService.exec(createOrderDto);
-  }
+  constructor(private readonly getOrderService: GetOrderService) {}
 
   @Get('list')
   public async getUserOrder(@Body() { userId }: GetOrderDto): Promise<Order[]> {

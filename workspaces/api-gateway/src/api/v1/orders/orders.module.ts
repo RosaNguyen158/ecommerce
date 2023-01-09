@@ -6,10 +6,10 @@ import { OrdersController } from 'api/v1/orders/orders.controller';
 import { CreateOrderDetailService } from 'api/v1/orders/services/CreateOrderDetailService';
 import { CreateOrderService } from 'api/v1/orders/services/CreateOrderService';
 import { GetOrderService } from 'api/v1/orders/services/GetOrderService';
-import { CreateStripeCheckoutService } from 'api/v1/payments/services/CreatePaymentService';
 import { Order } from 'database/models/order.entity';
 import { OrderDetail } from 'database/models/orderDetail.entity';
 import { PaymentOrder } from 'database/models/paymentOrder.entity';
+import { CreatePaymentOrderService } from 'api/v1/paymentOrders/services/CreatePaymentOrderService';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order, OrderDetail, PaymentOrder])],
@@ -17,7 +17,7 @@ import { PaymentOrder } from 'database/models/paymentOrder.entity';
     CreateOrderService,
     CreateOrderDetailService,
     GetOrderService,
-    CreateStripeCheckoutService,
+    CreatePaymentOrderService,
     Stripe,
   ],
   controllers: [OrdersController],

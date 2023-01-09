@@ -21,6 +21,20 @@ export class createPaymentMethodMigration1672298577554
             type: 'varchar',
           },
           {
+            name: 'type',
+            type: 'varchar',
+          },
+          {
+            name: 'metadata',
+            type: 'jsonb',
+            default: `'{}'`,
+          },
+          {
+            name: 'email',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',

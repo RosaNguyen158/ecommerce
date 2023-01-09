@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
 import { PaymentMethod } from 'database/models/paymentMethod.entity';
-import type { CreatePaymentMethodDto } from 'api/admin/payments/paymentMethod.dto';
+import type { CreatePaymentMethodDto } from 'api/admin/paymentMethods/paymentMethod.dto';
 
 @Injectable()
 export class CreatePaymentMethodService {

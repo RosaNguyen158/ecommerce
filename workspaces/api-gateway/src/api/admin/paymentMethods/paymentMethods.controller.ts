@@ -3,8 +3,8 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { Roles } from 'api/admin/guard/roles.decorator';
 import { RolesGuard } from 'api/admin/guard/roles.guard';
-import { CreatePaymentMethodDto } from 'api/admin/payments/paymentMethod.dto';
-import { CreatePaymentMethodService } from 'api/admin/payments/services/CreatePaymentMethodService';
+import { CreatePaymentMethodDto } from 'api/admin/paymentMethods/paymentMethod.dto';
+import { CreatePaymentMethodService } from 'api/admin/paymentMethods/services/CreatePaymentMethodService';
 import { PaymentMethod } from 'database/models/paymentMethod.entity';
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -16,7 +16,7 @@ export class PaymentMethodsController {
   ) {}
 
   @Post()
-  public async createCategory(
+  public async createPaymentMethod(
     @Body() createPaymentMethodDto: CreatePaymentMethodDto,
   ): Promise<PaymentMethod> {
     return this.createPaymentMethodService.exec(createPaymentMethodDto);

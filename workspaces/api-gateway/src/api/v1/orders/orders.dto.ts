@@ -5,8 +5,6 @@ export class CreateOrderDto {
   @IsNotEmpty()
   userId: string;
 
-  paymentMethodId: string;
-
   listProducts: ProductOrderDto[];
 }
 

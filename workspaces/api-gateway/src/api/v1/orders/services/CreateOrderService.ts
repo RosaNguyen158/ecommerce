@@ -4,8 +4,15 @@ import type { Repository } from 'typeorm';
 
 import { Order } from 'database/models/order.entity';
 import { CreateOrderDetailService } from 'api/v1/orders/services/CreateOrderDetailService';
-import { CreateStripeCheckoutService } from 'api/v1/payments/services/CreatePaymentService';
-import type { CreateOrderDto } from 'api/v1/orders/orders.dto';
+import type { TStatus } from 'database/models/paymentOrder.entity';
+import type { IProductOrderParams } from 'api/services/StripeService/interface';
+
+export interface ICreateOrderParams {
+  userId: string;
+  listProducts: IProductOrderParams[];
+  amount: number;
+  status?: TStatus;
+}
 
 @Injectable()
 export class CreateOrderService {
@@ -13,18 +20,12 @@ export class CreateOrderService {
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
     private createOrderDetailService: CreateOrderDetailService,
-    private createStripeCheckoutService: CreateStripeCheckoutService,
   ) {}
 
   public async exec({
     userId,
-    paymentMethodId,
     listProducts,
-  }: CreateOrderDto): Promise<{
-    order: Order;
-    amount: number;
-    status: string;
-  }> {
+  }: ICreateOrderParams): Promise<Order> {
     const newOrder = this.orderRepository.create({ userId });
 
     try {
@@ -40,22 +41,7 @@ export class CreateOrderService {
         });
       });
 
-      const total = listProducts.reduce(
-        (total, item) => total + item.quantity * item.unitPrice,
-        0,
-      );
-
-      const createPayment = await this.createStripeCheckoutService.exec({
-        orderId: newOrder.id,
-        methodId: paymentMethodId,
-        total,
-      });
-
-      return {
-        order: newOrder,
-        amount: createPayment.amount,
-        status: createPayment.status,
-      };
+      return newOrder;
     } catch (error) {
       throw new InternalServerErrorException(error);
     }

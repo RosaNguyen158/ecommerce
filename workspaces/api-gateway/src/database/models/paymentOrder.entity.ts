@@ -3,12 +3,12 @@ import { AutoMap } from '@automapper/classes';
 
 import { BaseModel } from 'database/models/BaseModel';
 import { Order } from 'database/models/order.entity';
-import { PaymentMethod } from 'database/models/paymentMethod.entity';
 
 export const status = {
   unpaid: 'unpaid',
   paid: 'paid',
   pending: 'pending',
+  failed: 'failed',
 } as const;
 
 export type TStatus = keyof typeof status;
@@ -41,11 +41,4 @@ export class PaymentOrder extends BaseModel {
     onUpdate: 'CASCADE',
   })
   order: Order;
-
-  @AutoMap(() => PaymentMethod)
-  @ManyToOne(() => PaymentMethod, (method) => method.paymentOrders, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  method: PaymentMethod;
 }

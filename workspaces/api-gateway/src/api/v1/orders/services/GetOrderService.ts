@@ -16,7 +16,25 @@ export class GetOrderService {
     private orderRepository: Repository<Order>,
   ) {}
 
-  public async exec(params: IGetOrderParams): Promise<Order[]> {
-    return await this.orderRepository.findBy(params);
+  public async exec(key: IGetOrderParams): Promise<Order[]> {
+    try {
+      const getOrderIds = await this.orderRepository.find({
+        where: [
+          {
+            userId: key.userId,
+          },
+          {
+            id: key.id,
+          },
+        ],
+        relations: {
+          orderDetails: true,
+          paymentOrders: true,
+        },
+      });
+      return getOrderIds;
+    } catch (error) {
+      error;
+    }
   }
 }
