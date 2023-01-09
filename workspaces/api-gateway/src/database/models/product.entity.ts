@@ -7,9 +7,10 @@ import {
 } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
 
+import { BaseModel } from 'database/models/BaseModel';
 import { Category } from 'database/models/category.entity';
 import { ProductsCategories } from 'database/models/productsCategories.entity';
-import { BaseModel } from 'database/models/BaseModel';
+import { OrderDetail } from 'database/models/orderDetail.entity';
 
 @Entity({ name: 'products' })
 export class Product extends BaseModel {
@@ -37,6 +38,9 @@ export class Product extends BaseModel {
     (productsCategories) => productsCategories.product,
   )
   productsCategories?: ProductsCategories[];
+
+  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.product)
+  orderDetails?: OrderDetail[];
 
   @DeleteDateColumn()
   deletedAt?: Date;

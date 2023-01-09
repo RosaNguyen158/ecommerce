@@ -68,6 +68,7 @@ importers:
       rxjs: ^7.2.0
       slugify: ^1.6.5
       source-map-support: ^0.5.20
+      stripe: ^11.5.0
       supertest: ^6.3.0
       ts-jest: 29.0.3
       ts-loader: ^9.2.3
@@ -100,6 +101,7 @@ importers:
       rimraf: 3.0.2
       rxjs: 7.5.7
       slugify: 1.6.5
+      stripe: 11.5.0
       typeorm: 0.3.10_pg@8.8.0+ts-node@10.9.1
       typeorm-naming-strategies: 4.1.0_typeorm@0.3.10
     devDependencies:
@@ -4811,7 +4813,6 @@ packages:
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
-    dev: true
 
   /qs/6.9.3:
     resolution: {integrity: sha512-EbZYNarm6138UKKq46tdx08Yo/q9ZhFoAXAI1meAFd2GtbRDhbZY2WQSICskT0c5q99aFzLG1D4nvTk9tqfXIw==}
@@ -5271,6 +5272,14 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
     dev: true
+
+  /stripe/11.5.0:
+    resolution: {integrity: sha512-yjTqnzeUk2wg1yIeYWOAH6CL5qu9fINzOhqkibXfbyeWSBEBauQrfCoB8shMmREoK2qdkScz1HjahF9qUg+X3g==}
+    engines: {node: '>=12.*'}
+    dependencies:
+      '@types/node': 18.11.0
+      qs: 6.11.0
+    dev: false
 
   /superagent/8.0.2:
     resolution: {integrity: sha512-QtYZ9uaNAMexI7XWl2vAXAh0j4q9H7T0WVEI/y5qaUB3QLwxo+voUgCQ217AokJzUTIVOp0RTo7fhZrwhD7A2Q==}
