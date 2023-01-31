@@ -31,6 +31,8 @@ import { SignUpService } from 'api/auth/services/SignUpService';
 import { JwtStrategy } from 'api/auth/jwt.strategy';
 import { GetProfileService } from 'api/auth/services/GetProfileService';
 import { AdminProfile } from 'api/admin/admin.profile';
+import { CreateCartService } from 'api/v1/carts/services/CreateCartService';
+import { Cart } from 'database/models/cart.entity';
 import type { IAuthProps } from 'api/auth/auth.interface';
 import type { CreateCategoryDto } from 'api/admin/categories/categories.dto';
 
@@ -63,13 +65,14 @@ describe('CategoriesController (e2e)', () => {
           },
         }),
       ],
-      entities: [Category, Product, ProductsCategories, User],
+      entities: [Category, Product, ProductsCategories, User, Cart],
       providers: [
         CreateProductService,
         CheckProductExistedService,
         CreateProductCategoryService,
         GetCategoryByKeyService,
         GetRelatedCategoriesService,
+        CreateCartService,
         AdminProfile,
         JwtStrategy,
         SignUpService,
@@ -213,6 +216,7 @@ describe('CategoriesController (e2e)', () => {
         await createProductService.exec({
           name: 'product1',
           categoryId: category.id,
+          price: 30,
         });
 
         const listProducts = await getListProductInCategoryService.exec(

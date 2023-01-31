@@ -14,7 +14,6 @@ import { User } from 'database/models/user.entity';
 import { AuthVM, ProfileVM, SignInVM } from 'api/auth/auth.vm';
 import { SignInService } from 'api/auth/services/SignInService';
 import { SignUpService } from 'api/auth/services/SignUpService';
-
 import { AuthCredentialsDto } from 'api/auth/dto/auth-credential.dto';
 import type { IRequest } from 'interface';
 import type { IAuthProps } from 'api/auth/auth.interface';

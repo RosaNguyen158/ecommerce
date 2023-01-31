@@ -9,10 +9,10 @@ import {
 } from '@nestjs/common';
 import type { JwtService } from '@nestjs/jwt';
 import type { TestingModule } from '@nestjs/testing';
+import type { Repository } from 'typeorm';
 
 import { createTypeOrmOptions } from 'typeOrm.config';
 import { User } from 'database/models/user.entity';
-import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { userData } from '__tests__/seeds/user';
 import type { IAuthProps, IJwtPayload } from 'api/auth/auth.interface';
@@ -25,7 +25,7 @@ interface ICreateUserParams {
 }
 
 export interface IModuleMetaData extends ModuleMetadata {
-  entities?: Parameters<typeof TypeOrmModule['forFeature']>[0];
+  entities?: Parameters<(typeof TypeOrmModule)['forFeature']>[0];
   useOrm?: boolean;
   fakeTime?: boolean;
 }
@@ -52,9 +52,7 @@ export const createTestingModule = async ({
   }
 
   if (fakeTime) {
-    jest
-      .spyOn(global, 'Date')
-      .mockImplementation(() => mockDate as unknown as string);
+    jest.spyOn(global, 'Date').mockImplementation(() => mockDate);
   }
 
   const testingModule = await Test.createTestingModule({
@@ -83,12 +81,14 @@ export const createUser = async ({
   jwtService,
 }: ICreateUserParams): Promise<IAuthProps> => {
   const salt = await genSalt();
+
   const hashedPassword = await hash(userData.password, salt);
   const user: User = repository.create({
     username: userData.username,
     password: hashedPassword,
     role: userData.role,
   });
+
   await repository.save(user);
   const payload: IJwtPayload = { username: user.username };
 

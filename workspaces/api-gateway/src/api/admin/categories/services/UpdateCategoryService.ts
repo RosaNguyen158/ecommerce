@@ -34,6 +34,10 @@ export class UpdateCategoryService {
       },
     });
 
+    if (!category) {
+      throw new NotFoundException(`Not found ${slug}`);
+    }
+
     if (name && category.name !== name) {
       slug = await createSlug(
         { name: name, columnName: 'slug' },
@@ -41,10 +45,6 @@ export class UpdateCategoryService {
           this.checkedCategoryExistedService,
         ),
       );
-    }
-
-    if (!category) {
-      throw new NotFoundException(`Not found ${slug}`);
     }
 
     if (parentId) {

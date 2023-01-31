@@ -2,7 +2,6 @@ import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 import { HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import type { Repository } from 'typeorm';
 import type { INestApplication } from '@nestjs/common';
 import type { Mapper } from '@automapper/core';
 
@@ -17,7 +16,6 @@ import type { IAuthProps } from 'api/auth/auth.interface';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
-  let userRepository: Repository<User>;
   let dataSource: DataSource;
   let mapper: Mapper;
   let jwtService: JwtService;
@@ -35,7 +33,6 @@ describe('AuthController (e2e)', () => {
       entities: [User],
     });
 
-    userRepository = module.get('UserRepository');
     dataSource = module.get(DataSource);
     jwtService = module.get(JwtService);
     signUpService = module.get(SignUpService);
@@ -52,7 +49,8 @@ describe('AuthController (e2e)', () => {
   });
 
   afterEach(async () => {
-    await userRepository.clear();
+    const queryRunner = dataSource.createQueryRunner();
+    await queryRunner.manager.query('TRUNCATE users CASCADE');
   });
 
   afterAll(async () => {
@@ -64,8 +62,8 @@ describe('AuthController (e2e)', () => {
     describe('with valid username and password', () => {
       it('returns profile & authToken', async () => {
         const signUpDto: AuthCredentialsDto = {
-          username: 'Signup',
-          password: 'Signup1235',
+          username: 'user1',
+          password: 'User12345',
         };
 
         jest

@@ -12,10 +12,12 @@ import { User } from 'database/models/user.entity';
 import { SignUpService } from 'api/auth/services/SignUpService';
 import { SignInService } from 'api/auth/services/SignInService';
 import { GetProfileService } from 'api/auth/services/GetProfileService';
+import { CreateCartService } from 'api/v1/carts/services/CreateCartService';
+import { Cart } from 'database/models/cart.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Cart]),
     PassportModule,
     JwtModule.register({
       secret: process.env.SECRET_KEY_JWT,
@@ -31,6 +33,7 @@ import { GetProfileService } from 'api/auth/services/GetProfileService';
     SignUpService,
     SignInService,
     GetProfileService,
+    CreateCartService,
   ],
   controllers: [AuthController],
 })

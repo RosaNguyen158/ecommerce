@@ -6,6 +6,7 @@ export const productSample: Product = {
   id: '2',
   name: 'Product 1',
   slug: 'Product-1',
+  price: 30,
   categoryId: categoriesSample.id,
   createdAt: mockDate,
   updatedAt: mockDate,

@@ -12,8 +12,8 @@ import { GetListCategoriesService } from 'api/v1/categories/services/GetListCate
 @Controller('categories')
 export class CategoriesController {
   constructor(
-    private readonly getCategoriesTreeService: GetCategoriesTreeService,
-    private readonly getListCategoriesService: GetListCategoriesService,
+    private getCategoriesTreeService: GetCategoriesTreeService,
+    private getListCategoriesService: GetListCategoriesService,
   ) {}
 
   @Get()
